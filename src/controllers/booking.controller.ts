@@ -45,9 +45,10 @@ export const createBooking = async (req:any, res:Response) => {
 export const getUserBooking = async (req:any, res:Response) => {
 
     try{
-        const bookings = await prisma.booking.findFirst({
+        const bookings = await prisma.booking.findMany({
             where: {userId: Number(req.user.id)},
-            include:{room:true}
+            include:{room:true},
+            orderBy: { startTime: 'asc' },
         })
         res.json(bookings)
     }catch(err){

@@ -1,6 +1,15 @@
 import {Request, Response} from 'express';
 import {prisma} from "../lib/prisma";
 
+export const getRooms = async (_req: Request, res: Response) => {
+    try {
+        const rooms = await prisma.room.findMany({ orderBy: { id: 'asc' } });
+        res.json(rooms);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching rooms', err });
+    }
+};
+
 export const createRoom = async (req: Request, res: Response) => {
 
     try {
@@ -28,14 +37,14 @@ export const createRoom = async (req: Request, res: Response) => {
 
             const rooms = await prisma.room.findMany({
                 where: {
-                    bookings:{
-                        none:{
-                            AND:[
-                                {startTime:{lt:end}},
-                                {endTime:{lt:start}},
-                            ]
-                        }
-                    }
+                    bookings: {
+                        none: {
+                            AND: [
+                                { startTime: { lt: end } },
+                                { endTime: { gt: start } },
+                            ],
+                        },
+                    },
                 }
             })
             res.json(rooms);

@@ -2,7 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import jwt from "jsonwebtoken";
 import {Role} from "@prisma/client";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 // src/middlewares/auth.ts
 export const auth = (req: any, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -11,7 +11,7 @@ export const auth = (req: any, res: Response, next: NextFunction) => {
     const token = authHeader.split(' ')[1]; // Отримуємо сам токен після "Bearer"
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
+        const decoded = jwt.verify(token, JWT_SECRET) as any;
         req.user = decoded; // ТУТ МАЮТЬ БУТИ id ТА role
         next();
     } catch (err) {
