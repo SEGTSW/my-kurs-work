@@ -32,7 +32,6 @@ export function DashboardPage() {
 
   const [myBookings, setMyBookings] = useState<Booking[]>([]);
   const [allBookings, setAllBookings] = useState<Booking[]>([]);
-  const [rooms, setRooms] = useState<Room[]>([]);
   const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
@@ -51,12 +50,8 @@ export function DashboardPage() {
 
   const loadData = useCallback(async () => {
     try {
-      const [mine, allRooms] = await Promise.all([
-        api.getMyBookings(token),
-        api.getRooms(token),
-      ]);
+      const mine = await api.getMyBookings(token);
       setMyBookings(mine);
-      setRooms(allRooms);
       if (admin) {
         const [all, stats, usersList] = await Promise.all([
           api.getAllBookings(token),

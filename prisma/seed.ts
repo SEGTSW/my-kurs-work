@@ -6,15 +6,18 @@ const prisma = new PrismaClient();
 async function main() {
   const password = await bcrypt.hash('password123', 10);
 
+  await prisma.booking.deleteMany();
+  await prisma.room.deleteMany();
+
   const user2 = await prisma.user.upsert({
     where: { email: 'user1@example.com' },
-    update: {},
+    update: { password, role: 'USER' },
     create: { email: 'user1@example.com', password, role: 'USER' },
   });
 
   const user3 = await prisma.user.upsert({
     where: { email: 'user2@example.com' },
-    update: {},
+    update: { password, role: 'USER' },
     create: { email: 'user2@example.com', password, role: 'USER' },
   });
 
@@ -27,7 +30,7 @@ async function main() {
 
   const admin = await prisma.user.upsert({
     where: { email: 'denderys32@gmail.com' },
-    update: {},
+    update: { password, role: 'ADMIN' },
     create: { email: 'denderys32@gmail.com', password, role: 'ADMIN' },
   });
 
