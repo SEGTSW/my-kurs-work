@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 
@@ -17,10 +17,12 @@ model User {
 }
 
 model Room {
-  id       Int       @id @default(autoincrement())
-  name     String
-  capacity Int
-  bookings Booking[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  capacity  Int
+  amenities String    @default("")
+  imageUrl  String?
+  bookings  Booking[]
 }
 
 model Booking {

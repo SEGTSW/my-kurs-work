@@ -53,11 +53,14 @@ export const api = {
       token,
     ),
 
-  createRoom: (token: string, name: string, capacity: number) =>
+  createRoom: (token: string, name: string, capacity: number, amenities: string[] = [], imageUrl: string | null = null) =>
     request<Room>('/rooms', {
       method: 'POST',
-      body: JSON.stringify({ name, capacity }),
+      body: JSON.stringify({ name, capacity, amenities, imageUrl }),
     }, token),
+
+  getAnalytics: (token: string) =>
+    request<import('../types').AnalyticsData>('/analytics', {}, token),
 
   getMyBookings: (token: string) =>
     request<Booking[]>('/bookings/my', {}, token),
@@ -87,6 +90,14 @@ export const api = {
         });
       }
     }),
+
+  getAllUsers: (token: string) =>
+    request<import('../types').User[]>('/users', {}, token),
+
+  makeAdmin: (token: string, id: number) =>
+    request<import('../types').User>(`/users/${id}/role`, {
+      method: 'PATCH',
+    }, token),
 };
 
 export function toLocalInputValue(iso: string) {

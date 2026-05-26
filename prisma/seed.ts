@@ -25,8 +25,10 @@ async function main() {
     prisma.room.create({ data: { name: 'Open Space', capacity: 30 } }),
   ]);
 
-  const admin = await prisma.user.findUniqueOrThrow({
+  const admin = await prisma.user.upsert({
     where: { email: 'denderys32@gmail.com' },
+    update: {},
+    create: { email: 'denderys32@gmail.com', password, role: 'ADMIN' },
   });
 
   const bookings = [
